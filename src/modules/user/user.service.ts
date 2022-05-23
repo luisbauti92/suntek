@@ -20,7 +20,7 @@ export class UserService {
             return findUser;
         }
         else {
-            throw new ConflictException('User not created');
+            throw new ConflictException('Error User or Password Incorrect');
         }
     }
 }
