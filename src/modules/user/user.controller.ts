@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import { CreateUserDto } from 'src/dto/createUser.dto';
@@ -10,8 +10,9 @@ export class UserController {
     constructor(@InjectConnection() private readonly mongoConnection: Connection, private userService: UserService) {}
 
     @Get()
-    getLogin(): string {
-        return 'Usuario devuelto';
+    async getUsers(@Res() res) {
+        const users = await this.userService.getUsers();
+        return res.status(HttpStatus.OK).json(users);
     }
     @Post()
     //@HttpCode(HttpStatus.NO_CONTENT)

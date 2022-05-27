@@ -1,6 +1,6 @@
-import { ConflictException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ClientSession, Model, Schema as MongooseSchema } from 'mongoose';
+import { ClientSession, Model } from 'mongoose';
 import { CreateUserDto } from 'src/dto/createUser.dto';
 import { User } from 'src/entities/user.entity';
 
@@ -42,5 +42,27 @@ export class UserRepository {
         }
 
         return user;
+    }
+
+    async getUserByid(id: string) : Promise<User>{
+        let user;
+        try {
+            user = await this.userModel.findById(id).exec();
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
+
+        return user;
+    }
+
+    async getUsers(): Promise<User[]>{
+        let users;
+        try {
+            users = await this.userModel.find().exec();
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
+
+        return users;
     }
 }

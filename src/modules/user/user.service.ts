@@ -23,4 +23,9 @@ export class UserService {
             throw new ConflictException('Error User or Password Incorrect');
         }
     }
+
+    async getUsers() {
+        const user = await this.userRepository.getUsers();
+        return user;
+    }
 }
