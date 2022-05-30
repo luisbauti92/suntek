@@ -21,14 +21,19 @@ export class User extends Document {
 
     @Prop()
     updatedAt: Date;
-
-    validatePassword(password: string): Promise<boolean> {
-        return bcrypt.compare(password, this.password);
-    }
 }
 
-export const UserSchema = SchemaFactory.createForClass(User).pre('save', async function(next){
+export const UserSchema = SchemaFactory.createForClass(User).pre('save', async function (this: User, next: any) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
+});
+UserSchema.pre('findOneAndUpdate', async function () {
+    const user = this.cast(this.model, this.getUpdate());
+    if (user.password) {
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(user.password, salt);
+        user.password = hash;
+        this.setUpdate(user);
+    }
 });

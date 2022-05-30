@@ -1,13 +1,14 @@
 import { ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ClientSession, Model } from 'mongoose';
+import { ClientSession, Model, Schema as MongooseSchema } from 'mongoose';
 import { CreateUserDto } from 'src/dto/createUser.dto';
 import { User } from 'src/entities/user.entity';
+import { UpdateUserDTO } from '../dto/updateUser.dto';
 
 export class UserRepository {
     constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
-    async createUser(createUserDto: CreateUserDto, session: ClientSession) {
+    async createUser(createUserDto: CreateUserDto, session: ClientSession): Promise<User> {
         let user = await this.getUserByEmail(createUserDto.username);
 
         if (user) {
@@ -33,7 +34,7 @@ export class UserRepository {
 
         return user;
     }
-    async getUserByEmail(username: string) {
+    async getUserByEmail(username: string): Promise<User> {
         let user;
         try {
             user = await this.userModel.findOne({ userName : username }).exec();
@@ -44,7 +45,7 @@ export class UserRepository {
         return user;
     }
 
-    async getUserByid(id: string) : Promise<User>{
+    async getUserByid(id: MongooseSchema.Types.ObjectId) : Promise<User>{
         let user;
         try {
             user = await this.userModel.findById(id).exec();
@@ -64,5 +65,28 @@ export class UserRepository {
         }
 
         return users;
+    }
+
+    async updateUser(updateUserDto: UpdateUserDTO, session: ClientSession) {
+        const actualDate = new Date();
+        actualDate.toUTCString();
+        const updateData : any = {...updateUserDto};
+        updateData.updatedAt = actualDate;
+        let product;
+        try {
+            product = await this.userModel
+                .findOneAndUpdate({ _id: updateUserDto.id}, updateData, {
+                    new: true,
+                })
+                .session(session)
+                .exec();
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
+
+        if (!product) {
+            throw new ConflictException('Error trying to update product');
+        }
+        return product;
     }
 }
