@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Res } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection, Schema as MongooseSchema } from 'mongoose';
 import { CreateUserDto } from 'src/dto/createUser.dto';
@@ -53,5 +53,15 @@ export class UserController {
         } finally {
             session.endSession();
         }
+    }
+
+    @Delete('/:id')
+    async deleteUser(@Res() res, @Param('id') id: MongooseSchema.Types.ObjectId) {
+        const userDeleted = await this.userService.deleteProduct(id);
+        if (!userDeleted) throw new NotFoundException('User does not exist!');
+        return res.status(HttpStatus.OK).json({
+            message: 'User Deleted Successfully',
+            userDeleted
+        });
     }
 }

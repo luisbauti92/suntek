@@ -89,4 +89,14 @@ export class UserRepository {
         }
         return product;
     }
+
+    async deleteUser(id: MongooseSchema.Types.ObjectId) : Promise<User>{
+        let user;
+        try {
+            user = await this.userModel.findByIdAndDelete(id);
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
+        return user;
+    }
 }

@@ -39,4 +39,8 @@ export class UserService {
     async updateUser(updateUserDto: UpdateUserDTO, session: ClientSession) {
         return await this.userRepository.updateUser(updateUserDto, session);
     }
+
+    async deleteProduct(userId: MongooseSchema.Types.ObjectId): Promise<any> {
+        return await this.userRepository.deleteUser(userId);
+    }
 }
