@@ -12,7 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
-       	uri: config.get<string>('DATABASE_URI')
+       	uri: config.get<string>('DATABASE_URI_LOCAL')
       })
     }),
     UserModule,

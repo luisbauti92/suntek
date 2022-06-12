@@ -1,6 +1,6 @@
 # compiled output
-/dist
-/node_modules
+/suntek.rest-api-nestjs/dist
+/suntek.rest-api-nestjs/node_modules
 /mongo
 /scripts
 
