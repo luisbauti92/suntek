@@ -12,4 +12,8 @@ export class LoginComponent implements OnInit {
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   ngOnInit(): void {}
+  
+  login() {
+    console.log("hola putito");
+  }
 }
