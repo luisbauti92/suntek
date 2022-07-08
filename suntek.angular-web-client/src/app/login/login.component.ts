@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '@services/login.service';
-
+import { LoginService } from '@core/services/login.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { User } from '@shared/models/User.interface';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -8,12 +10,19 @@ import { LoginService } from '@services/login.service';
 })
 export class LoginComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor(private loginSerice: LoginService) {}
+  form: FormGroup = new FormGroup({
+    username: new FormControl('', [Validators.required, Validators.maxLength(25), Validators.pattern(/^[A-Za-z\-_.]+$/)]),
+    password: new FormControl('', [Validators.required])
+  });
+  constructor(private loginService: LoginService) {}
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   ngOnInit(): void {}
-  
+
   login() {
-    console.log("hola putito");
+    const user : User = this.form.value;
+    this.loginService.login(user).subscribe(async res => {
+      console.log(res);
+    });
   }
 }

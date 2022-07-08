@@ -4,7 +4,7 @@ import { CreateUserDto } from 'src/dto/createUser.dto';
 import { LoginDto } from 'src/dto/login.dto';
 import { UserRepository } from './repositories/user.repository';
 import * as bcrypt from 'bcrypt';
-import { User } from './interfaces/user.interface';
+import { User } from 'src/entities/user.entity';
 import { UpdateUserDTO } from './dto/updateUser.dto';
 
 @Injectable()

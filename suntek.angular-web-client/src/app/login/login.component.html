@@ -3,16 +3,18 @@
     <div class="card-header">
       <b> INGRESO</b>
     </div>
-    <div class="card-body p-4">
-      <label style="float: left;">Usuario</label>
-      <input class="form-control m-2" type="text" placeholder="ingrese su Usuario">
+    <form novalidate [formGroup]="form" (ngSubmit)="login()" class="mt-5">
+      <div class="card-body p-4">
+        <label style="float: left;">Usuario</label>
+        <input formControlName="username" class="form-control m-2" type="text" placeholder="ingrese su Usuario">
 
-      <label style="float: left;">Password</label>
-      <input class="form-control m-2" type="password" placeholder="ingrese su Password" >
+        <label style="float: left;">Password</label>
+        <input formControlName="password" class="form-control m-2" type="password" placeholder="ingrese su Password" >
 
-      <button class="btn btn-primary btn-block m-2" (click)="login()">Ingresar</button>
-      <label>Aun no tienes cuenta? <a routerLink="/register">Registrarse</a></label>
-    </div>
+        <button type="submit" class="btn btn-primary btn-block m-2" [disabled]="form.invalid">Ingresar</button>
+        <label>Aun no tienes cuenta? <a routerLink="/register">Registrarse</a></label>
+      </div>
+    </form>
 
 
   </div>
