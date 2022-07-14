@@ -3,7 +3,7 @@ import { User } from 'src/entities/user.entity';
 import { LoginDto } from '../../dto/login.dto';
 import { UserService } from '../user/user.service';
 
-@Controller('login')
+@Controller('auth')
 export class LoginController {
 
   constructor(private userService: UserService) {}
@@ -13,9 +13,9 @@ export class LoginController {
     return 'Retrieving Login';
   }
 
-  @Post()
+  @Post('login')
   //@HttpCode(HttpStatus.NO_CONTENT)
-  async loginUser(@Body() Credential: LoginDto): Promise<User> {
+  async loginUser(@Body() Credential: LoginDto) {
     return await this.userService.getUser(Credential);
   }
 }
